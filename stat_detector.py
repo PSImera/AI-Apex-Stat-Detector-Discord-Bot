@@ -137,7 +137,8 @@ async def on_message(message: discord.Message):
         is_image = True
         print(f"[IMG] {attachment.filename} by {message.author.name}")
         bytes_image = await attachment.read()
-        image = Image.open(io.BytesIO(bytes_image))
+        bytesio_image = io.BytesIO(bytes_image)
+        image = Image.open(bytesio_image)
     else:
         is_image = False
         await message.delete()
@@ -166,8 +167,8 @@ async def on_message(message: discord.Message):
         await attachment.save(file_path)
         await message.delete()
 
-        stats = stat_by_screen(bytes_image, attachment.filename)
-        skill, rank = role_by_stats(**stats)
+        stats = await stat_by_screen(bytes_image, attachment.filename)
+        skill, rank = await role_by_stats(**stats)
 
         log = f'{message.author.mention}```python\n' + '\n'.join(f'{key} = {value}' for key, value in stats.items()) + '```'
 

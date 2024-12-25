@@ -9,7 +9,7 @@ def season_convert(s):
     else:
         return 0
 
-def role_by_stats(**kwargs):
+async def role_by_stats(**kwargs):
     base_stats_miss = [k for k in ["kills", "deaths", "kd", "counted_kd", "avg", "is_ranked"] if k not in kwargs]
     rank_stats_miss = [k for k in ["rank_kills", "rank_deaths", "rank_kd", "rank_counted_kd", "rank_avg", "rank_games", "season"] if k not in kwargs]
     season_stats_miss = [k for k in ["season_kills", "season_deaths", "season_kd", "season_counted_kd", "season_avg"] if k not in kwargs]
