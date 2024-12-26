@@ -34,7 +34,7 @@ tree = discord.app_commands.CommandTree(client)
 @client.event
 async def on_ready():
     await tree.sync()
-    print(f'{client.user} is ready')
+    print(f'[BOT] {client.user} is ready')
 
 
 # CONFIG BLOCK
@@ -80,7 +80,7 @@ async def set_skill_roles(interaction: discord.Interaction, index: str, role: di
         await interaction.response.send_message("You do not have sufficient permissions to execute this command", ephemeral=True)
 
 @tree.command(name="set_rank_roles", description="rank roles. [0] not ranked & From [1] bronze to [7] predator")
-@discord.app_commands.describe(index="Skill level", role="role on server")
+@discord.app_commands.describe(index="Rank index", role="role on server")
 async def set_rank_roles(interaction: discord.Interaction, index: str, role: discord.Role):
     if interaction.user.guild_permissions.administrator:
         guild_id = str(interaction.guild_id)
@@ -94,6 +94,25 @@ async def set_rank_roles(interaction: discord.Interaction, index: str, role: dis
     else:
         await interaction.response.send_message("You do not have sufficient permissions to execute this command", ephemeral=True)
 
+@tree.command(name="set_mode", description="Switch between three modes")
+@discord.app_commands.describe(mode="Choose one of the three modes")
+@discord.app_commands.choices(
+    mode=[
+        discord.app_commands.Choice(name="Skill only", value="skill_only"),
+        discord.app_commands.Choice(name="Rank only", value="rank_only"),
+        discord.app_commands.Choice(name="Both roles", value="both_roles"),
+    ]
+)
+async def set_mode(interaction: discord.Interaction, mode: discord.app_commands.Choice[str]):
+    if interaction.user.guild_permissions.administrator:
+        guild_id = str(interaction.guild_id)
+        if guild_id not in config:
+            config[guild_id] = {}
+        config[guild_id]["MODE"] = mode.value
+        save_config(config)
+        await interaction.response.send_message(f"Bot is now in '{mode.name}' mode.", ephemeral=True)
+    else:
+        await interaction.response.send_message("You do not have sufficient permissions to execute this command.", ephemeral=True)
 
 
 @client.event
@@ -160,6 +179,7 @@ async def on_message(message: discord.Message):
         roles_map_skill = config[guild_id].get("SKILL_ROLES", {})
         roles_map_rank = config[guild_id].get("RANK_ROLES", {})
         log_channel = client.get_channel(config[guild_id].get("LOG_CHANNEL_ID"))
+        mode = config[guild_id].get("MODE")
 
         # save img to temp folder and delete message
         os.makedirs('temp', exist_ok=True)
@@ -170,7 +190,7 @@ async def on_message(message: discord.Message):
         stats = await stat_by_screen(bytes_image, attachment.filename)
         skill, rank = await role_by_stats(**stats)
 
-        log = f'{message.author.mention}```python\n' + '\n'.join(f'{key} = {value}' for key, value in stats.items()) + '```'
+        log = f'```python\n' + '\n'.join(f'{key} = {value}' for key, value in stats.items()) + '```'
 
         # remove current roles from roles list
         current_skill_roles = [rl_name for rl_name, rl_id in roles_map_skill.items() if discord.utils.get(message.guild.roles, id=rl_id) in message.author.roles]
@@ -183,20 +203,37 @@ async def on_message(message: discord.Message):
         if skill == 'error':
             await message.channel.send(f'{message.author.mention} [error] cant reed stats from this image. try make better screen')
             await log_channel.send(log, file=discord.File(file_path))
-            print(f'[IMG] error, {message.author.name} not get role, cant read stats')
+            print(f'[BOT] error, {message.author.name} not get role, cant read stats')
             return
+        
+        if mode == 'both_roles':
+            skill_role = discord.utils.get(message.guild.roles, id=roles_map_skill.get(skill))
+            rank_role = discord.utils.get(message.guild.roles, id=roles_map_rank.get(rank))
+            await message.author.add_roles(skill_role)
+            await message.author.add_roles(rank_role)
+            await message.channel.send(f'{message.author.mention} you get roles **{skill_role}** and **{rank_role}**')
+            print(f'[BOT] {message.author.name} get roles {skill} & {rank}')
+            await log_channel.send(f'{message.author.mention}{skill_role.mention}{rank_role.mention}'+log, file=discord.File(file_path))
+        elif mode == 'skill_only':
+            skill_role = discord.utils.get(message.guild.roles, id=roles_map_skill.get(skill))
+            await message.author.add_roles(skill_role)
+            await message.channel.send(f'{message.author.mention} you get role **{skill_role}**')
+            print(f'[BOT] {message.author.name} get role {skill}')
+            await log_channel.send(f'{message.author.mention}{skill_role.mention}'+log, file=discord.File(file_path))
+        elif mode == 'rank_only':
+            rank_role = discord.utils.get(message.guild.roles, id=roles_map_rank.get(rank))
+            await message.author.add_roles(rank_role)
+            await message.channel.send(f'{message.author.mention} you get role **{rank_role}**')
+            print(f'[BOT] {message.author.name} get role {rank}')
+            await log_channel.send(f'{message.author.mention}{rank_role.mention}'+log, file=discord.File(file_path))
+        else:
+            print(f"something wrong with mode setting")
 
-        skill_role = discord.utils.get(message.guild.roles, id=roles_map_skill.get(skill))
-        rank_role = discord.utils.get(message.guild.roles, id=roles_map_rank.get(rank))
-        await message.author.add_roles(skill_role)
-        await message.author.add_roles(rank_role)
-        await message.channel.send(f'{message.author.mention} you get roles **{skill_role}** and **{rank_role}**')
-        print(f'[IMG] {message.author.name} get roles {skill} & {rank}')
-        await log_channel.send(log, file=discord.File(file_path))
+
 
         os.remove(file_path)
         shutil.rmtree('temp')
-        print(f"[IMG] temp files deleted: {file_path}")
+        print(f"[BOT] temp files deleted: {file_path}")
 
     return
 

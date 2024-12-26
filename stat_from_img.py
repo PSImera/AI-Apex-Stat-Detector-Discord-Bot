@@ -10,7 +10,9 @@ from itertools import combinations
 DEBUG_PRINT = False
 DEBUG_IMG = False
 debug_folder = 'image_parts'
-os.makedirs(debug_folder, exist_ok=True)
+
+if DEBUG_IMG:
+    os.makedirs(debug_folder, exist_ok=True)
 
 
 async def find_circ(image: Image, r: int) -> list:
