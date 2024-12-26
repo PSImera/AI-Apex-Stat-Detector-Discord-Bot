@@ -6,12 +6,12 @@
 
 This bot get screenshot of statistics, reads the information from it and, based on these statistics, gives the user a role or two roles depending on mode.
 
-![Statistics Channel](images/stat_channel.png)
+![Statistics Channel](images\\stat_channel.png)
 
 The Skill role based on skill and the Rank role based on maximum rank at season.
 Messages with screenshots must be sent in special channel. The bot immediately deletes this message and replies to the user about the roles given to him.
 
-![Log Channel](images/log_channel.png)
+![Log Channel](images\\log_channel.png)
 
 The bot saves the sent image into log channel with statistic information and roles given. It is assumed that the log channel is visible only for admins so that people do not hesitate to dump their statistics in a public channel, but you can save this log in the same channel.
 
@@ -59,17 +59,17 @@ Accuracy: 0.5933 - Character Accuracy: 0.8308
 apex_stats_detector.pth metrics
 Accuracy: 0.8304 - Character Accuracy: 0.8627
 ```
-![Damage](images\damage-annot.png)
-![KD](images\kd-annot.png)
+![Damage](images\\damage-annot.png)
+![KD](images\\kd-annot.png)
 
 To determine whether a specific screenshot is ranked or global statistics, bot use title of right block
 
-![Title](images\title-annot.png)
+![Title](images\\title-annot.png)
 
 To determine the rank, bot use color information from the split emblem. In the case of a season with one split, the emblem determines both splits.
 
-![Split 1](images\split_1.png)
-![Split 2](images\split_2.png)
+![Split 1](images\\split_1.png)
+![Split 2](images\\split_2.png)
 
 > the rank is given by the maximum rank in season
 
