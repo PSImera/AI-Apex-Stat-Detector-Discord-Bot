@@ -2,78 +2,76 @@
 
 <img src="images/effect.png" width="560" height="302"/>
 
-Данный бот принимает изображение со скриншотом статистики, читает информацию с этого скриншота и на основании этой статистики даёт пользователю роль или две роли в зависимости от режима работы.
+This bot get screenshot of statistics, reads the information from it and, based on these statistics, gives the user a role or two roles depending on mode.
 
-![Канал Статистики](images/stat_channel.png)
+![Statistics Channel](images/stat_channel.png)
 
-Роль Skill на основании скила и роль Rank на основании его максимального ранга в сезоне.
-Сообщения со скриншотами необходимо присылать в одном канале. Бот сразу удаляет это сообщение и отвечает пользователю о выданых ему ролях.
+The Skill role based on skill and the Rank role based on maximum rank at season.
+Messages with screenshots must be sent in special channel. The bot immediately deletes this message and replies to the user about the roles given to him.
 
-![Канал логов](images/log_channel.png)
+![Log Channel](images/log_channel.png)
 
-Бот сохраняет присланое изображение в канал логов сопровождая прочитанной информацией и указывает выданные роли. Предполагается что канал логов видят только админы для того чтобы люди не стеснялись скидывать свою статистику в публичном канале, но вы можете сохранять этот лог и в том же самом канале.
+The bot saves the sent image into log channel with statistic information and roles given. It is assumed that the log channel is visible only for admins so that people do not hesitate to dump their statistics in a public channel, but you can save this log in the same channel.
 
+# Usage
 
-# Использование
+- Tested on **Python 3.9** and library versions specified in `requirments.txt`
+- Enter your bot's token in the `.env` file in the root folder with the line `TOKEN = '<your token>'`
+- For start, run `stat_detector.py`
+- If your machine has an **NVIDIA** gpu, you can run bot using **CUDA**, which will increase the speed. To do this, you must have **[CUDA® Toolkit]**, **[cuDNN]** and **[Torch]** version with GPU support installed (present in requirmentsGPU.txt)
 
-- Протестировано на **Python 3.9** и версиях библеотек указанных в `requirments.txt`
-- Токен вашего бота впишите в фаил `.env` в корневой папке строкой `TOKEN = '<ваш токен>'`
-- Для старта запустите `stat_detector.py`
-- Если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст прирост в скорости работы. Для этого должны быть установлены **CUDA® Toolkit**, **cuDNN** и **[Torch]** версию с поддержкой GPU (присутствует в requirmentsGPU.txt)
+## Limitations
 
-## Ограничения
+- Bot works with a resolution of 1280x720 and higher (but if you want to remove this limitation, it is easy to find in the code. Most likely, the bot will find information on smaller images, but I added this limitation to filter out poor quality screenshots)
+- Image quality affects the quality of reading information, so the quality must be good (not a photo of the screen, for example)
+- Bot doesn't work well with stretched resolution screenshots. Most likely it will give an error
+- Bot doesn't perceive information well (mainly rank) from images with distorted colors
+- It is necessary that during the screenshot all information is visible and the mouse hovered over some area does not display a pop-up window that overlaps the information
+- The game language must be english or russian
 
-- Бот работает с разрешением 1280x720 и более (но если хочется это ограничение убрать, это легко найти в коде. Скорее всего бот будет находить информацию и на более мелких изображениях, но я добавил это ограничение чтобы отсеять плохого качества скрины)
-- Качество изображения влияет на качество чтения информации, так что качество должно быть хорошим (не фото экрана например)
-- Бот плохо работает с растянутыми изображениями (stretched res), скорее всего выдаст ошибку
-- Бот плохо воспринимает информацию (в основном ранг) с изображений с искаженными цветами
-- Необходимо чтобы во время скриншота вся информация была видна и наведённая мышка в какой-то области не выводила всплывающего окна, которое перекрывает информацию
-- Язык игры должен быть английским или русским
+> Why it like this? Read **How it works** section *
 
-> Почему так в разделе с деталями работы*
+## slash commands
+The settings saved in `config.json` file, and you can edit it manually if anything, but all the settings are made using slash commands
 
-## слэш команды
-Настройка хранятся в файле `config.json`, его если что можно отредактировать руками, но все настройки производятся с помощью слэеш команд
+| command | Description |
+|---------- |--------------------------------|
+| set_channel | select the channel for screenshot uploading |
+| set_log_channel | select the channel for saving logs |
+| set_skill_roles | select the list of roles assigned by skill level (indices from 1 to 6) |
+| set_rank_roles | select the list of roles assigned by rank (indices from 0 to 7) where 0 for screen without ranked stats, and 1-7 are ranks from bronze to predator |
+| set_mode | select from 3 operating modes (both roles or special one) |
 
-| команда  | Описание                       |
-|----------   |--------------------------------|
-| set_channel | выбор канала куда будут кидать изображения |
-| set_log_channel | выбор канала куда будут сохранятся логи |
-| set_skill_roles | выбор списка ролей назначаемых по уровню скила (индексы от 1 до 6) |
-| set_rank_roles | выбор списка ролей назначаемых по рангу (индексы от 0 до 7) где 0 это скрин без ранкеда, а 1-7 это ранги от бронзы до предатора |
-| set_mode | выбор из 3 режимов работы (обе роли или какую-то одну) |
+## Details of the bot and model training
 
+The bot works with different resolutions, it can find images with either wide screen or 4:3 or 5:4 images, but it should not be stretched because detecting based on search for 4 circles with information and if bot doesn't find them, it returns an error, since elipses are obviously not circles.
+> Perhaps in the next versions I will add the functionality of working with stretched images, but for now you will have to ask users with a non-standard resolution to make screenshots not stretched (for example, GeForce makes a screenshot with the set resolution) or set standart resolution temporarily for get screenshot.
 
-## Детали работы бота и обучения моделей
-
-Бот работает с разными разрешениями, может находить изображения хоть с wide screen, хоть с 4:3 или 5:4 изображений, но они должны быть не растянутыми потому как в основе ориентации по изображению идёт поиск 4 кругов с информацией и если бот их не находит, то выдаёт ошибку, так как овалы это очевидно не круги. 
-> Возможно в следующих версиях я добавлю боту функционал работы и с растянутыми изображениями, но пока придётся просить пользователей с нестандартным разрешением делать скриншоты не растянутыми (например GeForce делает скриншот с установленным разрешением, а не таким как оно растянуто у пользователя на экране и такое изображение подойдёт) или ставить разрешение временно на стандартное для скриншота.
-
-Чтение текста производится с помощью **EasyOCR** `cyrillic_g2.pth` модели дообученной на 10180 изображений с текстом, взятых с разных скриншотов статистики.
-Для обучения использовался [EasyOCR trainer], изображения размечались с помощью самодельной аппликации для разметки текста сделанной с помощью библиотеки [tkinter]. После обучения точность чтения шрифта со скриншотов статистики заметно выросло
+Text reading use **EasyOCR** ​​`cyrillic_g2.pth` model retrained on 10180 images with text taken from different statistics screenshots.
+For training, **[EasyOCR trainer]** was used, images were marked up using a homemade text markup application made using the **[tkinter]** library. After training, the accuracy of reading the font from statistics screenshots has increased significantly
 
 ```
 default EasyOCR cyrillic_g2.pth metrics
-Accuracy: 0.5933  - Character Accuracy: 0.8308
+Accuracy: 0.5933 - Character Accuracy: 0.8308
 
 apex_stats_detector.pth metrics
-Accuracy: 0.8304  - Character Accuracy: 0.8627
+Accuracy: 0.8304 - Character Accuracy: 0.8627
 ```
-![Урон](images\damage-annot.png)
-![КД](images\kd-annot.png)
+![Damage](images\damage-annot.png)
+![KD](images\kd-annot.png)
 
-Для определения того что конкретный скриншот это ранкед или это глобальная статистика используется текст из заголовка
+To determine whether a specific screenshot is ranked or global statistics, bot use title of right block
 
-![Заголовок](images\title-annot.png)
+![Title](images\title-annot.png)
 
-для определения ранга используется информация о цвете с эмблемы сплита. В случае сезона с одним сплитом эмблема определяет оба сплита.
+To determine the rank, bot use color information from the split emblem. In the case of a season with one split, the emblem determines both splits.
 
-![Сплит 1](images\split_1.png)
-![Сплит 2](images\split_2.png)
+![Split 1](images\split_1.png)
+![Split 2](images\split_2.png)
 
-> ранг даётся по максимальному рангу в сезоне
+> the rank is given by the maximum rank in season
 
-Далее вся полученная информация обрабатывается моделью [LightGBM] обученной на датасете из 3300 строк статистики. Статистика считана с изображений, скаченных с нескольких популярных дискорд серверов, где люди в общем доступе публикуют свою статистику чтобы получить роль. Для парсинга использовался [Discord Media Downloader]. Все изображения размечались вручную субъективно. Для разметки использовалась аппликация сделанная на всё той же [tkinter]. Точность определения моделью составляет:
+Then all the received information is processed by the **[LightGBM]** model trained on a dataset of 3300 lines of statistics. The statistics were read from images downloaded from several popular discord servers, where people publicly publish their statistics to get a role. **[Discord Media Downloader]** was used for parsing. All images were manually subjectively marked. For marking i again use self made application on **[tkinter]**. The accuracy of the model is:
 ```
 crossval accuracy
 0.9461597742887745
@@ -82,9 +80,12 @@ test accuracy
 0.8203883495145631
 ```
 
+> If you have any questions or ideas, you can contact me on discord **@psimera**
 
 [Discord]: https://discordapp.com/
 [DiscordDevelopers]: https://discordapp.com/developers/applications/
+[CUDA® Toolkit]: https://developer.nvidia.com/cuda-toolkit
+[cuDNN]: https://developer.nvidia.com/cudnn
 [Torch]: https://pytorch.org/get-started/locally/
 [EasyOCR trainer]: https://github.com/JaidedAI/EasyOCR
 [tkinter]: https://docs.python.org/3/library/tkinter.html
