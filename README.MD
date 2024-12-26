@@ -1,6 +1,6 @@
-# Apex AI stat detector [Discord] bot
+# AI Apex Stat Detector <a href="https://discordapp.com/" target="_blank">Discord</a> Bot
 
-> **[Это описание есть на русском языке](README-RU.MD)**
+> <a href="README-RU.MD" target="_blank">**Это описание есть на русском языке**</a>
 
 <img src="images/effect.png" width="560" height="302"/>
 
@@ -17,10 +17,12 @@ The bot saves the sent image into log channel with statistic information and rol
 
 # Usage
 
-- Tested on **Python 3.9** and library versions specified in [requirments.txt](requirments.txt)
-- Enter your bot's token in the `.env` file in the root folder with the line `TOKEN = '<your token>'` ([example](.env.example))
+- Tested on **Python 3.9** and library versions specified in <a href="requirements.txt" target="_blank">requirements.txt</a>
+- Make bot on <a href="https://discordapp.com/developers/applications/" target="_blank">DiscordDevelopers</a> and cory token
+- Paste your token in the `.env` file in the root folder with the line `TOKEN = '<your token>'` (<a href=".env.example" target="_blank">example</a>)
 - For start, run `stat_detector.py`
-- If your machine has an **NVIDIA** gpu, you can run bot using **CUDA**, which will increase the speed. To do this, you must have **[CUDA® Toolkit]**, **[cuDNN]** and **[Torch]** version with GPU support installed (present in [requirmentsGPU.txt](requirmentsGPU.txt))
+- If your machine has an **NVIDIA** gpu, you can run bot using **CUDA**, which will increase the speed. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> and <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> version with GPU support installed (present in <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>)
+
 
 ## Limitations
 
@@ -34,7 +36,7 @@ The bot saves the sent image into log channel with statistic information and rol
 > Why it like this? Read **How it works** section *
 
 ## slash commands
-The settings saved in `config.json` file, and you can edit it manually if anything ([example](config_example.json)), but all the settings are made using slash commands
+The settings saved in `config.json` file, and you can edit it manually if anything (<a href="config_example.json" target="_blank">example</a>), but all the settings are made using slash commands
 
 | command | Description |
 |---------- |--------------------------------|
@@ -50,7 +52,7 @@ The bot works with different resolutions, it can find images with either wide sc
 > Perhaps in the next versions I will add the functionality of working with stretched images, but for now you will have to ask users with a non-standard resolution to make screenshots not stretched (for example, GeForce makes a screenshot with the set resolution) or set standart resolution temporarily for get screenshot.
 
 Text reading use **EasyOCR** ​​`cyrillic_g2.pth` model retrained on 10180 images with text taken from different statistics screenshots.
-For training, **[EasyOCR trainer]** was used, images were marked up using a homemade text markup application made using the **[tkinter]** library. After training, the accuracy of reading the font from statistics screenshots has increased significantly
+For training, <a href="https://github.com/JaidedAI/EasyOCR" target="_blank">**EasyOCR trainer**</a> was used, images were marked up using a homemade text markup application made using the <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">**tkinter**</a> library. After training, the accuracy of reading the font from statistics screenshots has increased significantly
 
 ```
 default EasyOCR cyrillic_g2.pth metrics
@@ -73,7 +75,7 @@ To determine the rank, bot use color information from the split emblem. In the c
 
 > the rank is given by the maximum rank in season
 
-Then all the received information is processed by the **[LightGBM]** model trained on a dataset of 3300 lines of statistics. The statistics were read from images downloaded from several popular discord servers, where people publicly publish their statistics to get a role. **[Discord Media Downloader]** was used for parsing. All images were manually subjectively marked. For marking i again use self made application on **[tkinter]**. The accuracy of the model is:
+Then all the received information is processed by the <a href="https://lightgbm.readthedocs.io/en/stable/" target="_blank">**LightGBM**</a> model trained on a dataset of 3300 lines of statistics. The statistics were read from images downloaded from several popular discord servers, where people publicly publish their statistics to get a role. <a href="https://github.com/gageirwin/Discord-Media-Downloader" target="_blank">**Discord Media Downloader**</a> was used for parsing. All images were manually subjectively marked. For marking i again use self made application on <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">**tkinter**</a>. The accuracy of the model is:
 ```
 crossval accuracy
 0.9461597742887745
@@ -82,16 +84,6 @@ test accuracy
 0.8203883495145631
 ```
 
-> If you need to change something in code, u can turn on by changing to True variables **DEBUG_PRINT** and/or **DEBUG_IMG** on top of the file [stat_from_img.py](stat_from_img.py), which will allow you to output individual details to the terminal and/or save preview images to the specified folder
+> If you need to change something in code, u can turn on by changing to True variables **DEBUG_PRINT** and/or **DEBUG_IMG** on top of the file <a href="stat_from_img.py" target="_blank">stat_from_img.py</a>, which will allow you to output individual details to the terminal and/or save preview images to the specified folder
 
 > If you have any questions or ideas, you can contact me on discord **@psimera**
-
-[Discord]: https://discordapp.com/
-[DiscordDevelopers]: https://discordapp.com/developers/applications/
-[CUDA® Toolkit]: https://developer.nvidia.com/cuda-toolkit
-[cuDNN]: https://developer.nvidia.com/cudnn
-[Torch]: https://pytorch.org/get-started/locally/
-[EasyOCR trainer]: https://github.com/JaidedAI/EasyOCR
-[tkinter]: https://docs.python.org/3/library/tkinter.html
-[LightGBM]: https://lightgbm.readthedocs.io/en/stable/
-[Discord Media Downloader]: https://github.com/gageirwin/Discord-Media-Downloader

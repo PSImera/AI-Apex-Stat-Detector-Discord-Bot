@@ -1,6 +1,6 @@
-# Apex AI stat detector [Discord] bot
+# AI Apex Stat Detector <a href="https://discordapp.com/" target="_blank">Discord</a> Bot
 
-**[English version](README.MD)**
+> <a href="README.MD" target="_blank">**English version**</a>
 
 <img src="images/effect.png" width="560" height="302"/>
 
@@ -18,10 +18,11 @@
 
 # Использование
 
-- Протестировано на **Python 3.9** и версиях библеотек указанных в [requirments.txt](requirments.txt)
-- Токен вашего бота впишите в фаил `.env` в корневой папке строкой `TOKEN = '<ваш токен>'` ([пример](.env.example))
+- Протестировано на **Python 3.9** и версиях библиотек указанных в <a href="requirements.txt" target="_blank">requirements.txt</a>
+- Создай бота на <a href="https://discordapp.com/developers/applications/" target="_blank">DiscordDevelopers</a> и скопируй токен
+- Вставь токен в фаил `.env` в корневой папке строкой `TOKEN = '<ваш токен>'` (<a href=".env.example" target="_blank">пример</a>) 
 - Для старта запустите `stat_detector.py`
-- Если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст прирост в скорости работы. Для этого должны быть установлены **[CUDA® Toolkit]**, **[cuDNN]** и **[Torch]** версию с поддержкой GPU (присутствует в [requirmentsGPU.txt](requirmentsGPU.txt))
+- Если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст прирост в скорости работы. Для этого должны быть установлены <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> и <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> версию с поддержкой GPU (присутствует в <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>) 
 
 ## Ограничения
 
@@ -35,7 +36,7 @@
 > Почему так? Читай раздел **детали работы** *
 
 ## слэш команды
-Настройка хранятся в файле `config.json`, его если что можно отредактировать руками ([пример](config_example.json)), но все настройки производятся с помощью слэеш команд
+Настройка хранятся в файле `config.json`, его если что можно отредактировать руками (<a href="config_example.json" target="_blank">пример</a>) , но все настройки производятся с помощью слэеш команд
 
 | команда  | Описание                       |
 |----------   |--------------------------------|
@@ -52,7 +53,7 @@
 > Возможно в следующих версиях я добавлю боту функционал работы и с растянутыми изображениями, но пока придётся просить пользователей с нестандартным разрешением делать скриншоты не растянутыми (например GeForce делает скриншот с установленным разрешением, а не таким как оно растянуто у пользователя на экране и такое изображение подойдёт) или ставить разрешение временно на стандартное для скриншота.
 
 Чтение текста производится с помощью **EasyOCR** `cyrillic_g2.pth` модели дообученной на 10180 изображений с текстом, взятых с разных скриншотов статистики.
-Для обучения использовался **[EasyOCR trainer]**, изображения размечались с помощью самодельной аппликации для разметки текста сделанной с помощью библиотеки **[tkinter]**. После обучения точность чтения шрифта со скриншотов статистики заметно выросло
+Для обучения использовался <a href="https://github.com/JaidedAI/EasyOCR" target="_blank">**EasyOCR trainer**</a>, изображения размечались с помощью самодельной аппликации для разметки текста сделанной с помощью библиотеки <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">**tkinter**</a>. После обучения точность чтения шрифта со скриншотов статистики заметно выросло
 
 ```
 default EasyOCR cyrillic_g2.pth metrics
@@ -75,7 +76,7 @@ Accuracy: 0.8304  - Character Accuracy: 0.8627
 
 > ранг даётся по максимальному рангу в сезоне
 
-Далее вся полученная информация обрабатывается моделью **[LightGBM]** обученной на датасете из 3300 строк статистики. Статистика считана с изображений, скаченных с нескольких популярных дискорд серверов, где люди в общем доступе публикуют свою статистику чтобы получить роль. Для парсинга использовался **[Discord Media Downloader]**. Все изображения размечались вручную субъективно. Для разметки использовалась аппликация сделанная на всё той же **[tkinter]**. Точность определения моделью составляет:
+Далее вся полученная информация обрабатывается моделью <a href="https://lightgbm.readthedocs.io/en/stable/" target="_blank">**LightGBM**</a> обученной на датасете из 3300 строк статистики. Статистика считана с изображений, скаченных с нескольких популярных дискорд серверов, где люди в общем доступе публикуют свою статистику чтобы получить роль. Для парсинга использовался <a href="https://github.com/gageirwin/Discord-Media-Downloader" target="_blank">**Discord Media Downloader**</a>. Все изображения размечались вручную субъективно. Для разметки использовалась аппликация сделанная на всё той же <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">**tkinter**</a>. Точность определения моделью составляет:
 ```
 crossval accuracy
 0.9461597742887745
@@ -84,16 +85,6 @@ test accuracy
 0.8203883495145631
 ```
 
-> В случае потребности что-то изменять в коде, в файле [stat_from_img.py](stat_from_img.py), вверху можно включить отладку поменяв переменные **DEBUG_PRINT** и/или **DEBUG_IMG** на True, что позволит выводить отдельные детали в терминал и/или сохранять предварительные изображения в указанную папку
+> В случае потребности что-то изменять в коде, в файле <a href="stat_from_img.py" target="_blank">stat_from_img.py</a>, вверху можно включить отладку поменяв переменные **DEBUG_PRINT** и/или **DEBUG_IMG** на True, что позволит выводить отдельные детали в терминал и/или сохранять предварительные изображения в указанную папку
 
 > Если у вас остались какие-то вопросы или есть идеи, можете связатся со мной в дискорде **@psimera** 
-
-[Discord]: https://discordapp.com/
-[DiscordDevelopers]: https://discordapp.com/developers/applications/
-[CUDA® Toolkit]: https://developer.nvidia.com/cuda-toolkit
-[cuDNN]: https://developer.nvidia.com/cudnn
-[Torch]: https://pytorch.org/get-started/locally/
-[EasyOCR trainer]: https://github.com/JaidedAI/EasyOCR
-[tkinter]: https://docs.python.org/3/library/tkinter.html
-[LightGBM]: https://lightgbm.readthedocs.io/en/stable/
-[Discord Media Downloader]: https://github.com/gageirwin/Discord-Media-Downloader
