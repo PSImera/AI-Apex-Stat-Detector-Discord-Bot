@@ -212,19 +212,19 @@ async def on_message(message: discord.Message):
             await message.author.add_roles(skill_role)
             await message.author.add_roles(rank_role)
             await message.channel.send(f'{message.author.mention} you get roles **{skill_role}** and **{rank_role}**')
-            print(f'[BOT] {message.author.name} get roles {skill} & {rank}')
+            print(f'[BOT] {message.author.name} get roles skill: {skill} & rank: {rank}')
             await log_channel.send(f'{message.author.mention}{skill_role.mention}{rank_role.mention}'+log, file=discord.File(file_path))
         elif mode == 'skill_only':
             skill_role = discord.utils.get(message.guild.roles, id=roles_map_skill.get(skill))
             await message.author.add_roles(skill_role)
             await message.channel.send(f'{message.author.mention} you get role **{skill_role}**')
-            print(f'[BOT] {message.author.name} get role {skill}')
+            print(f'[BOT] {message.author.name} get skill role {skill}')
             await log_channel.send(f'{message.author.mention}{skill_role.mention}'+log, file=discord.File(file_path))
         elif mode == 'rank_only':
             rank_role = discord.utils.get(message.guild.roles, id=roles_map_rank.get(rank))
             await message.author.add_roles(rank_role)
             await message.channel.send(f'{message.author.mention} you get role **{rank_role}**')
-            print(f'[BOT] {message.author.name} get role {rank}')
+            print(f'[BOT] {message.author.name} get rank role {rank}')
             await log_channel.send(f'{message.author.mention}{rank_role.mention}'+log, file=discord.File(file_path))
         else:
             print(f"something wrong with mode setting")

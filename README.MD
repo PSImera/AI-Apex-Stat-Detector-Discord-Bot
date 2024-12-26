@@ -1,5 +1,7 @@
 # Apex AI stat detector [Discord] bot
 
+> **[Это описание есть на русском языке](README-RU.MD)**
+
 <img src="images/effect.png" width="560" height="302"/>
 
 This bot get screenshot of statistics, reads the information from it and, based on these statistics, gives the user a role or two roles depending on mode.
@@ -15,10 +17,10 @@ The bot saves the sent image into log channel with statistic information and rol
 
 # Usage
 
-- Tested on **Python 3.9** and library versions specified in `requirments.txt`
-- Enter your bot's token in the `.env` file in the root folder with the line `TOKEN = '<your token>'`
+- Tested on **Python 3.9** and library versions specified in [requirments.txt](requirments.txt)
+- Enter your bot's token in the `.env` file in the root folder with the line `TOKEN = '<your token>'` ([example](.env.example))
 - For start, run `stat_detector.py`
-- If your machine has an **NVIDIA** gpu, you can run bot using **CUDA**, which will increase the speed. To do this, you must have **[CUDA® Toolkit]**, **[cuDNN]** and **[Torch]** version with GPU support installed (present in requirmentsGPU.txt)
+- If your machine has an **NVIDIA** gpu, you can run bot using **CUDA**, which will increase the speed. To do this, you must have **[CUDA® Toolkit]**, **[cuDNN]** and **[Torch]** version with GPU support installed (present in [requirmentsGPU.txt](requirmentsGPU.txt))
 
 ## Limitations
 
@@ -32,7 +34,7 @@ The bot saves the sent image into log channel with statistic information and rol
 > Why it like this? Read **How it works** section *
 
 ## slash commands
-The settings saved in `config.json` file, and you can edit it manually if anything, but all the settings are made using slash commands
+The settings saved in `config.json` file, and you can edit it manually if anything ([example](config_example.json)), but all the settings are made using slash commands
 
 | command | Description |
 |---------- |--------------------------------|
@@ -79,6 +81,8 @@ crossval accuracy
 test accuracy
 0.8203883495145631
 ```
+
+> If you need to change something in code, u can turn on by changing to True variables **DEBUG_PRINT** and/or **DEBUG_IMG** on top of the file [stat_from_img.py](stat_from_img.py), which will allow you to output individual details to the terminal and/or save preview images to the specified folder
 
 > If you have any questions or ideas, you can contact me on discord **@psimera**
 
