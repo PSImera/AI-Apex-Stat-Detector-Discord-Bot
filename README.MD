@@ -2,7 +2,7 @@
 
 > <a href="README-RU.MD" target="_blank">**Это описание есть на русском языке**</a>
 
-<img src="images/effect.png" width="560" height="302"/>
+![screendhot example](images/effect.png)
 
 The bot is designed to read and parse information - namely statistics - from screenshots. It can be configured to give a user either one of two roles (or both) based on the parsed statistics.
 
