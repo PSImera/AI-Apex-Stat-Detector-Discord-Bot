@@ -4,16 +4,15 @@
 
 <img src="images/effect.png" width="560" height="302"/>
 
-This bot get screenshot of statistics, reads the information from it and, based on these statistics, gives the user a role or two roles depending on mode.
+The bot is designed to read and parse information - namely statistics - from screenshots. It can be configured to give a user either one of two roles (or both) based on the parsed statistics.
 
 ![Statistics Channel](images/stat_channel.png)
 
-The Skill role based on skill and the Rank role based on maximum rank at season.
-Messages with screenshots must be sent in special channel. The bot immediately deletes this message and replies to the user about the roles given to him.
+The 'Skill' role is based on a rating computed from various statistics, while the 'Rank' role is given based on peak rank within the current season. Conceptually, users are supposed to provide screenshots of their statistics in a public channel, after which the bot parses the image, deletes it and informs the user which roles they were given.
 
 ![Log Channel](images/log_channel.png)
 
-The bot saves the sent image into log channel with statistic information and roles given. It is assumed that the log channel is visible only for admins so that people do not hesitate to dump their statistics in a public channel, but you can save this log in the same channel.
+The bot is also designed to discretely archive sent images in a separate, hidden channel. The intent behind archiving images in a hidden channel is to avoid discouraging users from sending their statistics in the otherwise public 'input' channel.
 
 # Usage
 
