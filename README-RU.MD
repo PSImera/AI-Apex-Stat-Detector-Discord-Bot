@@ -76,7 +76,7 @@ Accuracy: 0.8304  - Character Accuracy: 0.8627
 
 > ранг даётся по максимальному рангу в сезоне
 
-Далее вся полученная информация обрабатывается моделью <a href="https://lightgbm.readthedocs.io/en/stable/" target="_blank">**LightGBM**</a> обученной на датасете из 3300 строк статистики. Статистика считана с изображений, скаченных с нескольких популярных дискорд серверов, где люди в общем доступе публикуют свою статистику чтобы получить роль. Для парсинга использовался <a href="https://github.com/gageirwin/Discord-Media-Downloader" target="_blank">**Discord Media Downloader**</a>. Все изображения размечались вручную субъективно. Для разметки использовалась аппликация сделанная на всё той же <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">**tkinter**</a>. Точность определения моделью составляет:
+Далее вся полученная информация обрабатывается моделью <a href="https://lightgbm.readthedocs.io/en/stable/" target="_blank">**LightGBM**</a> обученной на датасете из 3294 строк статистики. Статистика считана с изображений, скаченных с нескольких популярных дискорд серверов, где люди в общем доступе публикуют свою статистику чтобы получить роль. Для парсинга использовался <a href="https://github.com/gageirwin/Discord-Media-Downloader" target="_blank">**Discord Media Downloader**</a>. Все изображения размечались вручную субъективно. Для разметки использовалась аппликация сделанная на всё той же <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">**tkinter**</a>. Точность определения моделью составляет:
 ```
 crossval accuracy
 0.9461597742887745

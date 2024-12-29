@@ -74,7 +74,7 @@ The rank is read by using color information from the rank emblems. In some cases
 
 > A player's rank corresponds to their peak rank in the season.
 
-Received information is processed by the <a href="https://lightgbm.readthedocs.io/en/stable/" target="_blank">**LightGBM**</a> model, trained on a dataset of 3300 lines of statistics. The statistics were read from images downloaded from several popular discord servers, where people publicly submit their statistics to get roles. <a href="https://github.com/gageirwin/Discord-Media-Downloader" target="_blank">**Discord Media Downloader**</a> was used for parsing. All images were manually subjectively marked. To mark the images, I created a tool with <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">**tkinter**</a>. The accuracy of the model is:
+Received information is processed by the <a href="https://lightgbm.readthedocs.io/en/stable/" target="_blank">**LightGBM**</a> model, trained on a dataset of 3294 lines of statistics. The statistics were read from images downloaded from several popular discord servers, where people publicly submit their statistics to get roles. <a href="https://github.com/gageirwin/Discord-Media-Downloader" target="_blank">**Discord Media Downloader**</a> was used for parsing. All images were manually subjectively marked. To mark the images, I created a tool with <a href="https://docs.python.org/3/library/tkinter.html" target="_blank">**tkinter**</a>. The accuracy of the model is:
 ```
 crossval accuracy
 0.9461597742887745
