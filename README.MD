@@ -24,7 +24,9 @@ If you are going to host the bot on a server or you just don't want to install a
 
 `docker pull psimera/apex-stat-detector-bot`
 
-> You also need to copy the `.env` file with your token to the docker container `docker cp <path_to/.env> <container name>:/bot`
+You also need to copy the `.env` file with your token to the docker container 
+
+`docker cp <path_to/.env> <container name>:/bot`
 
 If you are going to run it locally and if your machine has a **NVIDIA** gpu, then you can run the bot using **CUDA**, which will increase performance. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> and a version of <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> with GPU support installed
 

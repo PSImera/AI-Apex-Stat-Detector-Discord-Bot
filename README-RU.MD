@@ -26,7 +26,9 @@
 
 `docker pull psimera/apex-stat-detector-bot`
 
-> В контейнер докера необходимо так же скопировать фаил `.env` с вашим токеном `docker cp <путь_к/.env> <имя контейнера>:/bot`
+В контейнер докера необходимо так же скопировать фаил `.env` с вашим токеном 
+
+`docker cp <путь_к/.env> <имя контейнера>:/bot`
 
 Если же вы собираетесь запустить его локально и если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст знеачительный прирост в скорости работы. Для этого должны быть установлены <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> и <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> версия с поддержкой GPU
 
