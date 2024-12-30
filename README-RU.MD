@@ -18,11 +18,20 @@
 
 # Использование
 
-- Протестировано на **Python 3.9** и версиях библиотек указанных в <a href="requirements.txt" target="_blank">requirements.txt</a>
 - Создай бота на <a href="https://discordapp.com/developers/applications/" target="_blank">DiscordDevelopers</a> и скопируй токен
 - Вставь токен в фаил `.env` в корневой папке строкой `TOKEN = '<ваш токен>'` (<a href=".env.example" target="_blank">пример</a>) 
 - Для старта запустите <a href="main.py" target="_blank">main.py</a>
-- Если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст прирост в скорости работы. Для этого должны быть установлены <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> и <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> версию с поддержкой GPU (присутствует в <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>) 
+
+Если вы собираетесь хостить бота на сервере или вы просто не хотите устанавливать в систему всё необходимое окружение и у вас нет видеокарты с поддержкой CUDA, то самый простой способ это использование docker
+
+`docker pull psimera/apex-stat-detector-bot`
+
+> В контейнер докера необходимо так же скопировать фаил `.env` с вашим токеном `docker cp <путь_к/.env> <имя контейнера>:/bot`
+
+Если же вы собираетесь запустить его локально и если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст знеачительный прирост в скорости работы. Для этого должны быть установлены <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> и <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> версия с поддержкой GPU
+
+> Протестировано на **Python 3.9**, **CUDA 11.8** и версиях библиотек указанных в <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>
+
 
 ## Ограничения
 

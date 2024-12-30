@@ -16,11 +16,19 @@ The bot is also designed to discretely archive sent images in a separate, hidden
 
 # Usage
 
-- Tested on **Python 3.9** and library versions specified in <a href="requirements.txt" target="_blank">requirements.txt</a>
 - Create a bot on <a href="https://discordapp.com/developers/applications/" target="_blank">DiscordDevelopers</a> and copy the token
 - Paste your token in the `.env` file in the root folder with the line `TOKEN = '<your token>'` (<a href=".env.example" target="_blank">example</a>)
 - To start an instance, run <a href="main.py" target="_blank">main.py</a>
-- If your machine has an **NVIDIA** gpu, you can run the bot using **CUDA**, which will increase performance. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> and a version of <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> with GPU support installed (see <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>)
+
+If you are going to host the bot on a server or you just don't want to install all the necessary environment on the system and you don't have a GPU with **CUDA** support, then the easiest way is to use docker
+
+`docker pull psimera/apex-stat-detector-bot`
+
+> You also need to copy the `.env` file with your token to the docker container `docker cp <path_to/.env> <container name>:/bot`
+
+If you are going to run it locally and if your machine has a **NVIDIA** gpu, then you can run the bot using **CUDA**, which will increase performance. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> and a version of <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> with GPU support installed
+
+> Tested on **Python 3.9**, **CUDA 11.8** and library versions listed in <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>
 
 
 ## Limitations
