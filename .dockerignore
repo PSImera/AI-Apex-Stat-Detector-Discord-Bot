@@ -1,0 +1,10 @@
+__pycache__/
+EasyOCR_model/craft_mlt_25k.pth
+images/
+README.md
+README-RU.MD
+config.json
+config_example.json
+.env
+.env.example
+.gitignore

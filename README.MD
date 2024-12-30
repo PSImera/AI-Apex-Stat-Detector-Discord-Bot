@@ -19,7 +19,7 @@ The bot is also designed to discretely archive sent images in a separate, hidden
 - Tested on **Python 3.9** and library versions specified in <a href="requirements.txt" target="_blank">requirements.txt</a>
 - Create a bot on <a href="https://discordapp.com/developers/applications/" target="_blank">DiscordDevelopers</a> and copy the token
 - Paste your token in the `.env` file in the root folder with the line `TOKEN = '<your token>'` (<a href=".env.example" target="_blank">example</a>)
-- To start an instance, run <a href="stat_detector.py" target="_blank">stat_detector.py</a>
+- To start an instance, run <a href="main.py" target="_blank">main.py</a>
 - If your machine has an **NVIDIA** gpu, you can run the bot using **CUDA**, which will increase performance. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> and a version of <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> with GPU support installed (see <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>)
 
 

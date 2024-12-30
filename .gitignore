@@ -1,6 +1,4 @@
 __pycache__/
-datasets/
-venv/
 EasyOCR_model/craft_mlt_25k.pth
 config.json
 .env
