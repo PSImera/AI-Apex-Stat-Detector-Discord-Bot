@@ -8,6 +8,14 @@ def season_convert(s):
         return 1
     else:
         return 0
+    
+def kd_check(kd, counted_kd, deaths):
+    if abs(kd - counted_kd) < 1:
+        return counted_kd
+    elif not deaths:
+        return kd
+    else: 
+        return counted_kd
 
 async def role_by_stats(**kwargs):
     base_stats_miss = [k for k in ["kills", "deaths", "kd", "counted_kd", "avg", "is_ranked"] if k not in kwargs]
@@ -27,13 +35,16 @@ async def role_by_stats(**kwargs):
 
         df = pd.DataFrame([kwargs], columns=ALL_COLUMNS)
 
+        df['kd'] = kd_check(kwargs.get('kd'), kwargs.get('counted_kd'), kwargs.get('deaths'))
         if is_ranked:
+            df['rank_kd'] = kd_check(kwargs.get('rank_kd'), kwargs.get('rank_counted_kd'), kwargs.get('rank_deaths'))
             rank_map = {'unknown': 0,'bronze': 1, 'silver': 2, 'gold': 3, 'platinum': 4, 'diamond': 5, 'master': 6, 'predator': 7}
             df['rank_s1'] = df['rank_s1'].map(rank_map).fillna(0).astype(int)
             df['rank_s2'] = df['rank_s2'].map(rank_map).fillna(0).astype(int)
             df['season'] = df['season'].apply(season_convert)
             rank = str(max(df['rank_s1'][0], df['rank_s2'][0]))
         else:
+            df['season_kd'] = kd_check(kwargs.get('season_kd'), kwargs.get('season_counted_kd'), kwargs.get('season_deaths'))
             rank = '0'
 
         model = joblib.load('skill_pred_model/lgbm_model.pkl')

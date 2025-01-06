@@ -95,6 +95,4 @@ test accuracy
 
 > Some files used to work on the project, such as markup applications, a notebook for training models, and other small things, are in <a href="https://github.com/PSImera/Tools_for_work_with_datasets" target="_blank">this</a> repository
 
-> If you need to change something in the code, you can set the **DEBUG_PRINT** and/or **DEBUG_IMG** to **True** at the top of <a href="stat_from_img.py" target="_blank">stat_from_img.py</a>, which will (1) output debug information into the terminal and/or (2) save preview images to the specified folder.
-
 > In case of questions, ideas or suggestions, feel free to contact me on discord <a href="https://discord.com/users/237271541040021505" target="_blank">**@psimera**</a>
