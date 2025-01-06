@@ -1,11 +1,9 @@
 import cv2
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
-import easyocr
-import io
 import re
 import os
-from itertools import combinations
+from concurrent.futures import ThreadPoolExecutor
 
 DEBUG_PRINT = False
 DEBUG_IMG = False
@@ -15,8 +13,11 @@ if DEBUG_IMG:
     os.makedirs(debug_folder, exist_ok=True)
 
 
-async def find_circ(image: Image, r: int) -> list:
+async def find_circ(image: Image) -> list:
     '''FIND CIRCLES ON IMAGE WITH GIVEN RADIUS AS R ARGUMENT'''
+
+    r = image.size[1] / 8.15
+    max_deviation = int(image.size[1]*0.015)
 
     grey = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2GRAY)
     rows = grey.shape[0]
@@ -32,24 +33,36 @@ async def find_circ(image: Image, r: int) -> list:
         param2=80,  # (80) "accumulator Hough Transform" trashold. Count of "votes" to confirm
                     # higher = less false circles
         minRadius=min_r, maxRadius=max_r)
+    
+    circles = [] if circles_cv2 is None else np.uint16(np.around(circles_cv2)).tolist()[0]
+    
+    if DEBUG_PRINT:
+        print('Circles list', circles)
 
-    return [] if circles_cv2 is None else np.uint16(np.around(circles_cv2)).tolist()[0]
-
-
-async def four_circles_in_line(circles: list, max_deviation: int) -> list:
-    '''FILTER ONLY 4 RIGHT CIRCLES WITH ALMOST SAME Y COORDINATE'''
-
-    valid_combinations = []
-    for subset in combinations(circles, 4):
-        ys = [circle[1] for circle in subset] 
-        if max(ys) - min(ys) <= max_deviation:
-            valid_combinations.append(sorted(subset, key=lambda c: c[0]))
-    if not valid_combinations:
+    if len(circles) < 4:
         return []
-    return sorted(valid_combinations, key=lambda c: c[0][0])[-1]
+        
+    y_groups = {}
+    for circle in circles:
+        y = circle[1]
+        for base_y in y_groups:
+            if abs(base_y - y) <= max_deviation:
+                y_groups[base_y].append(circle)
+                break
+        else:
+            y_groups[y] = [circle]
+    
+    valid_groups = [(y, group) for y, group in y_groups.items() if len(group) >= 4]
+    if not valid_groups:
+        return []
+    
+    best_group = max(valid_groups, key=lambda x: len(x[1]))
+    four_circles = sorted(best_group[1], key=lambda c: c[0])[-4:]
+    
+    return four_circles
 
 
-async def read_text_on_image(reader, image: Image) -> list:
+def read_text_on_image(reader, image: Image) -> list:
     '''READ TEXT FROM IMAGE EITH THE SETTINGS THAT WERE FOUND FOR THIS CASE'''
 
     return reader.readtext(np.array(image),
@@ -65,7 +78,8 @@ async def read_text_on_image(reader, image: Image) -> list:
                             ycenter_ths=0.5, # (0.5) Similarity of block centers in Y to merge. Share of first block height. Increase to merge more
                             )
 
-async def draw_readed_text(image: Image, ocr_results, filename: str):
+
+def draw_readed_text(image: Image, ocr_results, filename: str):
     '''FUNCTION FOR DEBUG ONLY, SAVE IMAGE WITH DRAWED TEXT ON IT'''
 
     font_path = 'TTSquaresCondensed-Regular.ttf'  # cyrylic font
@@ -103,7 +117,7 @@ async def ranked_check(reader, image: Image, filename: str) -> tuple:
 
     results = read_text_on_image(reader, image)
     if DEBUG_IMG:
-        await draw_readed_text(image, results, filename)
+        draw_readed_text(image, results, filename)
     result = [text for _, text, _ in results]
     text = ''.join(result)
 
@@ -124,7 +138,7 @@ async def ranked_check(reader, image: Image, filename: str) -> tuple:
     return (is_ranked, season)
 
 
-async def rank_detect(image: Image, filename: str) -> tuple:
+def rank_detect(image: Image, filename: str) -> tuple:
     '''DETECT RANK BY MEDIAN HUE OF EMBLEM'''
 
     COLORS_MAP = {
@@ -216,12 +230,11 @@ async def circles_data_processing(crc_1: list, crc_2: list, filename: str) -> tu
     return (kills, deaths, kd, counted_kd, avg) 
 
 
-async def stat_by_screen(img: bytes, filename: str) -> dict: 
+async def stat_by_screen(image: Image, reader, filename: str) -> dict: 
     '''MAIN FUNCTION TO COMBINE ALL RPROCESES OF GETING INFO FROM IMAGE
 
     coordinates based on proportions between circelse with base data
     
-    step 0: prepare to process
     step 1: found circles
     step 2: read text in circled
     step 3: save global block in dictionary
@@ -235,59 +248,33 @@ async def stat_by_screen(img: bytes, filename: str) -> dict:
     step 4: return result
     '''
 
-    # STEP 0
-    image = Image.open(io.BytesIO(img))
-    R = image.size[1] / 8.15
     res = {}
 
-    
     # STEP 1
-    circles = sorted(await find_circ(image, R), key=lambda x: x[0])
-    if DEBUG_PRINT:
-        print('Circles list', circles)
-    circles = await four_circles_in_line(circles, int(image.size[1]*0.015))
+    four_circles = await find_circ(image)
 
-    if len(circles) == 4:
-        reader = easyocr.Reader(['en', 'ru'], 
-                    model_storage_directory='EasyOCR_model',
-                    user_network_directory='EasyOCR_user_network',
-                    recog_network='apex_stats_detector')
-        
+    if four_circles:
         coor_list = [] # list of coordinates for image crop 
         CC = [] # Circles Centers
-        for circ in circles:
+        for circ in four_circles:
             cX, cY, cR = circ[0], circ[1], circ[2]
             CC.append((cX, cY))
             coor_list.append((cX-cR, cY-cR*0.3, cX+cR, cY+cR))
 
-        
         # STEP 2
-        glob_dmg_crop = image.crop(coor_list[0])
-        glob_kd_crop = image.crop(coor_list[1])
-        right_dmg_crop = image.crop(coor_list[2])
-        right_kd_crop = image.crop(coor_list[3])
+        with ThreadPoolExecutor() as executor:
+            texts = []
+            for i, coor in enumerate(coor_list):
+                crop = image.crop(coor)
+                result = executor.submit(read_text_on_image, reader, crop).result()
+                if DEBUG_IMG:
+                    executor.submit(draw_readed_text, crop, result, f'{filename}_circ_{i+1}')
+                text = [text for _, text, _ in sorted(result, key=lambda x: x[0][0][1])]
+                if DEBUG_PRINT:
+                    print(f'{filename}_circ_{i+1}:', text)
+                texts.append(text)
 
-        glob_dmg_results = await read_text_on_image(reader, glob_dmg_crop)
-        glob_kd_results = await read_text_on_image(reader, glob_kd_crop)
-        right_dmg_results = await read_text_on_image(reader, right_dmg_crop)
-        right_kd_results = await read_text_on_image(reader, right_kd_crop)
-
-        if DEBUG_IMG:
-            await draw_readed_text(glob_dmg_crop, glob_dmg_results, filename+'_global_damage')
-            await draw_readed_text(glob_kd_crop, glob_kd_results, filename+'_global_kd')
-            await draw_readed_text(right_dmg_crop, right_dmg_results, filename+'_right_damage')
-            await draw_readed_text(right_kd_crop, right_kd_results, filename+'_right_kd')
-
-        glob_dmg_text = [text for _, text, _ in sorted(glob_dmg_results, key=lambda x: x[0][0][1])]
-        glob_kil_text = [text for _, text, _ in sorted(glob_kd_results, key=lambda x: x[0][0][1])]
-        right_dmg_text = [text for _, text, _ in sorted(right_dmg_results, key=lambda x: x[0][0][1])]
-        right_kil_text = [text for _, text, _ in sorted(right_kd_results, key=lambda x: x[0][0][1])]
-        
-        if DEBUG_PRINT:
-            print(f'{filename} Global Damage block:', glob_dmg_text)
-            print(f'{filename} Global Kills block:', glob_kil_text)
-            print(f'{filename} Right Damage block:', right_dmg_text)
-            print(f'{filename} Right Kills block:', right_kil_text)
+        glob_dmg_text, glob_kil_text, right_dmg_text, right_kil_text = texts
 
         res['kills'], res['deaths'], res['kd'], res['counted_kd'], res['avg']  = await circles_data_processing(
             glob_dmg_text, glob_kil_text, filename+'_global')
@@ -304,9 +291,9 @@ async def stat_by_screen(img: bytes, filename: str) -> dict:
     
         title_coor = (x_left, t_top, x_right, t_bottom)
         title_crop = image.crop(title_coor)
-        title_res = await read_text_on_image(reader, title_crop)
+        title_res = read_text_on_image(reader, title_crop)
         if DEBUG_IMG:
-            await draw_readed_text(title_crop, title_res, filename)
+            draw_readed_text(title_crop, title_res, filename)
         right_block_list = [text for _, text, _ in title_res]
         right_block_title = ''.join(right_block_list)
         if DEBUG_PRINT:
@@ -322,15 +309,15 @@ async def stat_by_screen(img: bytes, filename: str) -> dict:
             res['season'] = ''.join([c for c in right_block_title if c.isdigit()])
 
             g_left = CC[2][0]-(D*0.45)
-            g_top = CYL - (D * 1.41)
+            g_top = CYL-(D*1.41)
             g_right = CC[2][0]+(D*0.1)
-            g_bottom = CYL - D
+            g_bottom = CYL-D
             rank_games_coor = (g_left, g_top, g_right, g_bottom)
             rank_games_crop = image.crop(rank_games_coor)
-            rank_games_results = await read_text_on_image(reader, rank_games_crop)
+            rank_games_results = read_text_on_image(reader, rank_games_crop)
 
             if DEBUG_IMG:
-                await draw_readed_text(rank_games_crop, rank_games_results, filename+'_rank_games')
+                draw_readed_text(rank_games_crop, rank_games_results, filename+'_rank_games')
 
             rank_games_list = [text for _, text, _ in rank_games_results]
 
@@ -352,22 +339,20 @@ async def stat_by_screen(img: bytes, filename: str) -> dict:
                     right_dmg_text, right_kil_text, filename + '_ranked')
             
             # STEP 3.2
-            s_top = CYL - D
-            s_bottom = CYL - (D/2)
-            split_1_coor = (x_left, s_top, x_center, s_bottom)
-            split_2_coor = (x_center, s_top, x_right, s_bottom)
-            split_1_crop = image.crop(split_1_coor)
-            split_2_crop = image.crop(split_2_coor)
+            splits_coor_list = [(x_left, CYL-D, x_center, CYL-(D/2)), 
+                                (x_center, CYL-D, x_right, CYL-(D/2))]
 
-            split_1 = await rank_detect(split_1_crop, filename+'split 1')
-            split_2 = await rank_detect(split_2_crop, filename+'split 2')
+            with ThreadPoolExecutor() as executor:
+                splits = []
+                for i, coor in enumerate(splits_coor_list):
+                    crop = image.crop(coor)
+                    split = executor.submit(rank_detect, crop, f'{filename}_solit_{i+1}').result()
+                    if DEBUG_PRINT:
+                        print(f'{filename}_solit_{i+1}', split)
+                    splits.append(split)
 
-            if DEBUG_PRINT: 
-                print('split_1 =', split_1)
-                print('split_2 =', split_2)
-
-            res['rank_s1'] = split_1
-            res['rank_s2'] = split_2
+            res['rank_s1'] = splits[0]
+            res['rank_s2'] = splits[1]
         else:
             res['season_kills'], res['season_deaths'], res['season_kd'], \
                 res['season_counted_kd'], res['season_avg']  = await circles_data_processing(

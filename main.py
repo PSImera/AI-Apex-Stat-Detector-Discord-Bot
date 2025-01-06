@@ -1,12 +1,17 @@
 import os
+import io
 import shutil
-import discord
 import json
 from dotenv import load_dotenv
+
+import discord
+
+import easyocr
+from PIL import Image
+
 from stat_from_img import stat_by_screen
 from stat_to_role import role_by_stats
-from PIL import Image
-import io
+
 
 load_dotenv()
 TOKEN = os.getenv('TOKEN')
@@ -35,6 +40,14 @@ tree = discord.app_commands.CommandTree(client)
 async def on_ready():
     await tree.sync()
     print(f'[BOT] {client.user} is ready')
+
+
+reader = easyocr.Reader(
+    ['en', 'ru'],
+    model_storage_directory='EasyOCR_model',
+    user_network_directory='EasyOCR_user_network',
+    recog_network='apex_stats_detector'
+)
 
 
 # CONFIG BLOCK
@@ -187,7 +200,7 @@ async def on_message(message: discord.Message):
         await attachment.save(file_path)
         await message.delete()
 
-        stats = await stat_by_screen(bytes_image, attachment.filename)
+        stats = await stat_by_screen(image, reader, attachment.filename)
         skill, rank = await role_by_stats(**stats)
 
         log = f'```python\n' + '\n'.join(f'{key} = {value}' for key, value in stats.items()) + '```'
