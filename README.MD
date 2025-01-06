@@ -17,7 +17,7 @@ The bot is also designed to discretely archive sent images in a separate, hidden
 ## Limitations
 
 The bot requires good quality screenshots, otherwise it won't accurately read information. This includes:
-- Standard scale resolutions of 1280x720 or higher
+- Standard aspect ratio resolutions of 1280x720 or higher
 - No heavily compressed or warped (e.g. a photo of a screen or a stretched resolution) images
 - Only default (no Reshade, colour-blind setting, etc) colours - important for reading ranks
 - There should be nothing blocking the screenshot, for example cursor or popup windows
