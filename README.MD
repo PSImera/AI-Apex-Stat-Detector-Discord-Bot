@@ -14,7 +14,19 @@ The 'Skill' role is based on a rating computed from various statistics, while th
 
 The bot is also designed to discretely archive sent images in a separate, hidden channel. The intent behind archiving images in a hidden channel is to avoid discouraging users from sending their statistics in the otherwise public 'input' channel.
 
-# Usage
+## Limitations
+
+The bot requires good quality screenshots, otherwise it won't accurately read information. This includes:
+- Standard scale resolutions of 1280x720 or higher
+- No heavily compressed or warped (e.g. a photo of a screen or a stretched resolution) images
+- Only default (no Reshade, colour-blind setting, etc) colours - important for reading ranks
+- There should be nothing blocking the screenshot, for example cursor or popup windows
+- English/Russian as supported languages
+
+> Why? See <a href="https://github.com/PSImera/AI-Apex-Stat-Detector-Discord-Bot/blob/main/README.MD#Description-of-the-ML-approach-for-the-bot" target="_blank">here</a>
+
+
+# Installation
 
 - Create a bot on <a href="https://discordapp.com/developers/applications/" target="_blank">DiscordDevelopers</a> and copy the token
 - Paste your token in the `.env` file in the root folder with the line `TOKEN = '<your token>'` (<a href=".env.example" target="_blank">example</a>)
@@ -33,17 +45,6 @@ If you are going to run it locally and if your machine has a **NVIDIA** gpu, the
 > Tested on **Python 3.9**, **CUDA 11.8** and library versions listed in <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>
 
 
-## Limitations
-
-- To filter out low quality screenshots, the bot will only parse images with a resolution of 1280x720 or higher. This limitation can easily be found in the source code and removed if needed - it is likely to still work on screenshots with lower resolutions.
-- The fidelity of provided images directly affects the bot's ability to accurately read information, which means that it will not work well with heavily compressed images or warped images (for example: perspective warping caused by taking an image of the monitor instead of taking a screenshot)
-- This includes other forms of warping, most importantly horizontal or vertical stretching
-- The bot is sensitive to color and will read information less accurately (most notably ranks) from images with filtered or changed colors
-- Provided screenshots must contain the statistics screen in full view, without the cursor and/or popup windows covering anything
-- Supported languages include English and Russian
-
-> Why? See <a href="https://github.com/PSImera/AI-Apex-Stat-Detector-Discord-Bot?tab=readme-ov-file#Internals-and-machine-learning" target="_blank">here</a>
-
 ## Supported commands
 The bot's settings are saved in `config.json`, which can be edited manually if needed (<a href="config_example.json" target="_blank">example</a>) - but the bot can be fully configured from discord using commands with the prefix `/`
 
@@ -55,7 +56,7 @@ The bot's settings are saved in `config.json`, which can be edited manually if n
 | set_rank_roles | Used to assign roles for ranks (indices from 0 to 7), where 0 corresponds to providing a screenshot without ranked stats, and 1-7 range from bronze to predator |
 | set_mode | Used to change operating mode between giving users a skill role, giving users a rank role, or giving both |
 
-## Internals and machine learning
+## Description of the ML approach for the bot
 
 The bot works with various different resolutions and supports all standard aspect ratios, which include 16:9, 16:10, 21:9, 4:3, and 5:4. Stretched or warped images are not supported because parsing works by scanning 4 circles for information. If the bot is provided with a screenshot that deviates from its original aspect ratio (e.g. 4:3 stretched to 16:9), the bot is not capable of stretching the circles within which it scans into ellipses to compensate for the warping.
 > In the future, I may implement support for stretched screenshots. For the forseeable future, you will have to ask users to provide screenshots where the aspect ratio matches the resolution, in other words - screenshots that aren't stretched. NVIDIA Shadowplay is already known to take screenshots in their original, non-stretched resolutions. Alternatively, you can enforce a standard resolution (and/or aspect ratio) until the functionality is implemented.
