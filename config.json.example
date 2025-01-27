@@ -1,0 +1,25 @@
+{
+    "<YOUR_SERVER_ID>": {
+        "MODE": "both_roles",
+        "STAT_CHANNEL_ID": <STAT_CHANNEL_ID>,
+        "LOG_CHANNEL_ID": <LOG_CHANNEL_ID>,
+        "SKILL_ROLES": {
+            "1": <LEVEL_1_ROLE_ID>,
+            "2": <LEVEL_2_ROLE_ID>,
+            "3": <LEVEL_3_ROLE_ID>,
+            "4": <LEVEL_4_ROLE_ID>,
+            "5": <LEVEL_5_ROLE_ID>,
+            "6": <LEVEL_6_ROLE_ID>
+        },
+        "RANK_ROLES": {
+            "0": <PUBS_ONLY_ROLE_ID>,
+            "1": <BRONZE_ROLE_ID>,
+            "2": <SILVER_ROLE_ID>,
+            "3": <GOLD_ROLE_ID>,
+            "4": <PLATINUM_ROLE_ID>,
+            "5": <DIAMOND_ROLE_ID>,
+            "6": <MASTER_ROLE_ID>,
+            "7": <PREDATOR_ROLE_ID>
+        }
+    }
+}
