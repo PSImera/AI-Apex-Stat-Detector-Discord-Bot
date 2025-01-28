@@ -1,6 +1,5 @@
 import os
 import io
-import shutil
 import json
 from dotenv import load_dotenv
 
@@ -209,6 +208,8 @@ async def on_message(message: discord.Message):
 
     if len(message.attachments) == 1:
         is_only_one_attachment = True
+        attachment = message.attachments[0]
+        file_name = attachment.filename
     else:
         is_only_one_attachment = False
         await message.delete()
@@ -218,13 +219,13 @@ async def on_message(message: discord.Message):
         )
         return
 
-    attachment = message.attachments[0]
-    if attachment.filename.endswith((".png", ".jpg", ".jpeg", ".gif", ".bmp")):
+    if file_name.endswith((".png", ".jpg", ".jpeg", ".gif", ".bmp")):
         is_image = True
-        print(f"[IMG] {attachment.filename} by {message.author.name}")
+        print(f"[IMG] {file_name} by {message.author.name}")
         bytes_image = await attachment.read()
         bytesio_image = io.BytesIO(bytes_image)
         image = Image.open(bytesio_image)
+        dc_file = discord.File(io.BytesIO(bytes_image), filename=file_name)
     else:
         is_image = False
         await message.delete()
@@ -246,27 +247,15 @@ async def on_message(message: discord.Message):
         return
 
     # IF ALL OK, READ SCREEN STATS AND GIVE ROLES
-    if all(
-        [
-            is_stat_channel,
-            is_attachment,
-            is_only_one_attachment,
-            is_image,
-            is_resolution_ok,
-        ]
-    ):
+    if all([is_stat_channel, is_attachment, is_only_one_attachment, is_image, is_resolution_ok, ]):
+        await message.delete()
 
         roles_map_skill = config[guild_id].get("SKILL_ROLES", {})
         roles_map_rank = config[guild_id].get("RANK_ROLES", {})
         log_channel = client.get_channel(config[guild_id].get("LOG_CHANNEL_ID"))
         mode = config[guild_id].get("MODE")
 
-        name_temp_file = attachment.filename
-
-        # save img to temp folder and delete message
-        await message.delete()
-
-        stats = await stat_by_screen(image, reader, attachment.filename)
+        stats = await stat_by_screen(image, reader, file_name)
         skill, rank = await role_by_stats(**stats)
 
         log = (
@@ -295,7 +284,6 @@ async def on_message(message: discord.Message):
                 discord.utils.get(message.guild.roles, id=roles_map_rank.get(cr_name))
             )
 
-        dc_file = discord.File(io.BytesIO(bytes_image), filename=name_temp_file)
 
         if skill == "error":
             await message.channel.send(
