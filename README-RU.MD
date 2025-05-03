@@ -38,10 +38,9 @@
 
 `docker cp <путь_к/.env> <имя контейнера>:/bot`
 
-Если же вы собираетесь запустить его локально и если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст знеачительный прирост в скорости работы. Для этого должны быть установлены <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> и <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> версия с поддержкой GPU
+Если же вы собираетесь запустить его локально на системе windows, запустите фаил **start-bot.bat**. Если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст значительный прирост в скорости работы. Для этого должны быть установлены <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit 11.8**</a> версии и <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN 8.9.5**</a>
 
-> Протестировано на **Python 3.9**, **CUDA 11.8** и версиях библиотек указанных в <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>
-
+> Протестировано на **Python 3.9**
 
 ## слэш команды
 Настройка хранятся в файле `config.json`, его если что можно отредактировать руками (<a href="config_example.json" target="_blank">пример</a>) , но все настройки производятся с помощью слэеш команд

@@ -38,10 +38,9 @@ You also need to copy the `.env` file with your token to the docker container
 
 `docker cp <path_to/.env> <container name>:/bot`
 
-If you are going to run it locally and if your machine has a **NVIDIA** gpu, then you can run the bot using **CUDA**, which will increase performance. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN**</a> and a version of <a href="https://pytorch.org/get-started/locally/" target="_blank">**Torch**</a> with GPU support installed
+If you are going to run it locally on a Windows system, run the **start-bot.bat** file. If your PC has an **NVIDIA** gpu, you can run the bot using **CUDA**, which will increase performance. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit 11.8**</a> and <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN 8.9.5**</a> installed.
 
-> Tested on **Python 3.9**, **CUDA 11.8** and library versions listed in <a href="requirementsGPU.txt" target="_blank">requirementsGPU.txt</a>
-
+> Tested on **Python 3.9**
 
 ## Supported commands
 The bot's settings are saved in `config.json`, which can be edited manually if needed (<a href="config_example.json" target="_blank">example</a>) - but the bot can be fully configured from discord using commands with the prefix `/`
