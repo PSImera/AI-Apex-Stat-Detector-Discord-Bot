@@ -24,19 +24,92 @@ The bot requires good quality screenshots, otherwise it won't accurately read in
 > Why? See <a href="https://github.com/PSImera/AI-Apex-Stat-Detector-Discord-Bot/blob/main/README.MD#Description-of-the-ML-approach-for-the-bot" target="_blank">here</a>
 
 
-# Installation
+# 🚀 Installation
 
-- Create a bot on <a href="https://discordapp.com/developers/applications/" target="_blank">DiscordDevelopers</a> and copy the token
-- Paste your token in the `.env` file in the root folder with the line `TOKEN = '<your token>'` (<a href=".env.example" target="_blank">example</a>)
-- To start an instance, run <a href="main.py" target="_blank">main.py</a>
+1. Clone the repository
+
+``` bash
+git clone https://github.com/PSImera/AI-Apex-Stat-Detector-Discord-Bot.git
+cd AI-Apex-Stat-Detector-Discord-Bot
+```
+
+2. Create a Discord Bot
+- Go to <a href="https://discordapp.com/developers/applications/" target="_blank">Discord Developer Portal</a>
+- Create an app and get a bot token
+- In the root of your project, create a `.env` file and add the line:
+
+```
+TOKEN = '<your token>'
+```
+
+> Example: <a href=".env.example" target="_blank">.env.example</a>
+
+3. Download Models
+
+- Install Git <a href="https://git-lfs.com/" target="_blank">LFS</a> (if not already installed):
+
+``` bash
+git lfs install
+```
+
+- Download models from <a href="https://huggingface.co/PSImera/AI-Apex-Stat-Detector-Models" target="_blank">Hugging Face</a> to the `models` folder:
+
+``` bash
+mkdir models
+cd models
+git clone https://huggingface.co/PSImera/AI-Apex-Stat-Detector-Models
+git lfs pull
+```
+
+4.   for Create virtual environment 
+
+> (for windows users) You can just use `start-bot.bat` for Create virtual environment if it's not created yet and script do it and start the bot 
+
+``` bash
+python -m venv venv
+source venv/bin/activate      # Linux/macOS
+venv\Scripts\activate.bat     # Windows
+pip install --upgrade pip
+```
+
+for using without GPU (CPU only):
+
+``` bash
+pip install -r requirements.txt
+```
+
+for using with GPU (NVIDIA, CUDA):
+
+``` bash
+pip install -r requirementsGPU.txt
+```
+
+Compiled for CUDA version 11.8
+If you have another one, you need to change torch in requirementsGPU.txt
+> ⚠️ for experienced users
+
+5. Launch
+
+Return to the root of the project and launch the bot:
+
+``` bash
+python main.py
+```
+
+# Docker Use case
 
 If you are going to host the bot on a server or you just don't want to install all the necessary environment on the system and you don't have a GPU with **CUDA** support, then the easiest way is to use docker
 
-`docker pull psimera/apex-stat-detector-bot`
+``` bash
+docker pull psimera/apex-stat-detector-bot
+```
 
 You also need to copy the `.env` file with your token to the docker container 
 
-`docker cp <path_to/.env> <container name>:/bot`
+``` bash
+docker cp <path_to/.env> <container name>:/bot
+```
+
 
 If you are going to run it locally on a Windows system, run the **start-bot.bat** file. If your PC has an **NVIDIA** gpu, you can run the bot using **CUDA**, which will increase performance. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit 11.8**</a> and <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN 8.9.5**</a> installed.
 

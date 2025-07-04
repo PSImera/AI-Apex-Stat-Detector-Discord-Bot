@@ -24,19 +24,92 @@
 
 > Почему так? Читай <a href="https://github.com/PSImera/AI-Apex-Stat-Detector-Discord-Bot/blob/main/README-RU.MD#%D0%B4%D0%B5%D1%82%D0%B0%D0%BB%D0%B8-%D1%80%D0%B0%D0%B1%D0%BE%D1%82%D1%8B-%D0%B1%D0%BE%D1%82%D0%B0-%D0%B8-%D0%BE%D0%B1%D1%83%D1%87%D0%B5%D0%BD%D0%B8%D1%8F-%D0%BC%D0%BE%D0%B4%D0%B5%D0%BB%D0%B5%D0%B9" target="_blank">тут</a>
 
-# Установка
+# 🚀 Установка
 
-- Создай бота на <a href="https://discordapp.com/developers/applications/" target="_blank">DiscordDevelopers</a> и скопируй токен
-- Вставь токен в фаил `.env` в корневой папке строкой `TOKEN = '<ваш токен>'` (<a href=".env.example" target="_blank">пример</a>) 
-- Для старта запустите <a href="main.py" target="_blank">main.py</a>
+1. Клонируйте репозиторий
+
+``` bash
+git clone https://github.com/PSImera/AI-Apex-Stat-Detector-Discord-Bot.git
+cd AI-Apex-Stat-Detector-Discord-Bot
+```
+
+2. Создайте Discord-бота
+- Перейдите на <a href="https://discordapp.com/developers/applications/" target="_blank">Discord Developer Portal</a>
+- Создайте приложение и получите токен бота
+- В корне проекта создайте файл `.env` и добавьте строку:
+
+```
+TOKEN = '<ваш токен>'
+```
+
+> Пример: <a href=".env.example" target="_blank">.env.example</a>
+
+3. Скачайте модели
+
+- Установите Git <a href="https://git-lfs.com/" target="_blank">LFS</a> (если не установлен):
+
+``` bash
+git lfs install
+```
+
+- Загрузите модели из <a href="https://huggingface.co/PSImera/AI-Apex-Stat-Detector-Models" target="_blank">Hugging Face</a> в папку `models`:
+
+``` bash
+mkdir models
+cd models
+git clone https://huggingface.co/PSImera/AI-Apex-Stat-Detector-Models
+git lfs pull
+```
+
+
+4. Создайте виртуальное окружение
+
+> (для пользователей Windows) Просто запустите `start-bot.bat` и скрипт установит окружение, если оно ешё не установлено и запустит бота
+
+``` bash
+python -m venv venv
+source venv/bin/activate      # Linux/macOS
+venv\Scripts\activate.bat     # Windows
+pip install --upgrade pip
+```
+
+Для использования без GPU (CPU):
+
+``` bash
+pip install -r requirements.txt
+```
+
+Для использования с GPU (NVIDIA, CUDA):
+
+``` bash
+pip install -r requirementsGPU.txt
+```
+
+Собрано под версию CUDA 11.8
+Если у вас стоит другая, то нужно менять torch в requirementsGPU.txt
+> ⚠️ для опытных пользователей
+
+5. Запуск
+
+Вернитесь в корень проекта и запустите бота:
+
+``` bash
+python main.py
+```
+
+# Вариант использования Docker
 
 Если вы собираетесь хостить бота на сервере или вы просто не хотите устанавливать в систему всё необходимое окружение и у вас нет видеокарты с поддержкой CUDA, то самый простой способ это использование docker
 
-`docker pull psimera/apex-stat-detector-bot`
+``` bash
+docker pull psimera/apex-stat-detector-bot
+```
 
 В контейнер докера необходимо так же скопировать фаил `.env` с вашим токеном 
 
-`docker cp <путь_к/.env> <имя контейнера>:/bot`
+``` bash
+docker cp <путь_к/.env> <имя контейнера>:/bot
+```
 
 Если же вы собираетесь запустить его локально на системе windows, запустите фаил **start-bot.bat**. Если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст значительный прирост в скорости работы. Для этого должны быть установлены <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit 11.8**</a> версии и <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN 8.9.5**</a>
 
