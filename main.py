@@ -47,8 +47,8 @@ async def on_ready():
 
 reader = easyocr.Reader(
     ["en", "ru"],
-    model_storage_directory="EasyOCR_model",
-    user_network_directory="EasyOCR_user_network",
+    model_storage_directory="models/EasyOCR_model",
+    user_network_directory="models/EasyOCR_user_network",
     recog_network="apex_stats_detector",
 )
 

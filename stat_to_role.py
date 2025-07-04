@@ -109,7 +109,7 @@ async def role_by_stats(**kwargs):
             )
             rank = "0"
 
-        model = joblib.load("skill_pred_model/lgbm_model.pkl")
+        model = joblib.load("models/lgbm_model.pkl")
         skill = str(model.predict(df)[0])
 
         return skill, rank

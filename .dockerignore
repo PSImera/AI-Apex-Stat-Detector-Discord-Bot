@@ -1,5 +1,5 @@
 __pycache__/
-EasyOCR_model/craft_mlt_25k.pth
+models/EasyOCR_model/craft_mlt_25k.pth
 images/
 README.md
 README-RU.MD

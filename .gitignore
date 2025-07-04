@@ -1,5 +1,5 @@
 __pycache__/
 venv/
-EasyOCR_model/craft_mlt_25k.pth
+models/
 config.json
 .env
