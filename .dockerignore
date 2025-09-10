@@ -1,5 +1,10 @@
+.venv/
 __pycache__/
+.git/
+.gitattributes
+.gitignore
 models/EasyOCR_model/craft_mlt_25k.pth
+log_train.txt
 images/
 README.md
 README-RU.MD
@@ -7,4 +12,5 @@ config.json
 config_example.json
 .env
 .env.example
-.gitignore
+start-bot.bat
+docker_comands.txt

@@ -2,16 +2,16 @@
 setlocal
 
 REM Define variable for Python in virtual environment
-set "VENV_PYTHON=venv\Scripts\python.exe"
+set "VENV_PYTHON=.venv\Scripts\python.exe"
 
 REM Check if virtual environment exists
 if not exist %VENV_PYTHON% (
     echo Creating virtual environment...
-    python -m venv venv
+    python -m venv .venv
 )
 
 REM Activate virtual environment
-call venv\Scripts\activate.bat
+call .venv\Scripts\activate.bat
 
 REM Check for CUDA 11.8
 set "CUDA_PATH=C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v11.8"
@@ -20,6 +20,12 @@ if exist "%CUDA_PATH%\bin\nvcc.exe" (
     %VENV_PYTHON% -m pip install --upgrade pip
     if %errorlevel% neq 0 (
         echo Error upgrading pip.
+        pause
+        exit /b %errorlevel%
+    )
+    pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cu128
+    if %errorlevel% neq 0 (
+        echo Error installing torch
         pause
         exit /b %errorlevel%
     )
@@ -34,6 +40,12 @@ if exist "%CUDA_PATH%\bin\nvcc.exe" (
     %VENV_PYTHON% -m pip install --upgrade pip
     if %errorlevel% neq 0 (
         echo Error upgrading pip.
+        pause
+        exit /b %errorlevel%
+    )
+    pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cpu
+    if %errorlevel% neq 0 (
+        echo Error installing torch
         pause
         exit /b %errorlevel%
     )

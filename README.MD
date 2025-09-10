@@ -63,7 +63,7 @@ git lfs pull
 
 4.   for Create virtual environment 
 
-> (for windows users) You can just use `start-bot.bat` for Create virtual environment if it's not created yet and script do it and start the bot 
+> (for windows users) You can just use `start-bot.bat` for Create virtual environment if it's not created yet and script do it and start the bot. You must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a> if you wanna use your nvidia gpu for increase bot performance. Tested on **Python 3.9**
 
 ``` bash
 python -m venv venv
@@ -75,17 +75,19 @@ pip install --upgrade pip
 for using without GPU (CPU only):
 
 ``` bash
+pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cpu
 pip install -r requirements.txt
 ```
 
 for using with GPU (NVIDIA, CUDA):
 
 ``` bash
-pip install -r requirementsGPU.txt
+pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cu128
+pip install -r requirements.txt
 ```
 
-Compiled for CUDA version 11.8
-If you have another one, you need to change torch in requirementsGPU.txt
+Compiled for CUDA version 12.8
+If you have another one, you may need to change torch version
 > ⚠️ for experienced users
 
 5. Launch
@@ -98,10 +100,8 @@ python main.py
 
 # Docker Use case
 
-If you are going to host the bot on a server or you just don't want to install all the necessary environment on the system and you don't have a GPU with **CUDA** support, then the easiest way is to use docker
-
 ``` bash
-docker pull psimera/apex-stat-detector-bot
+docker pull psimera/apex-stat-detector-bot-gpu
 ```
 
 You also need to copy the `.env` file with your token to the docker container 
@@ -110,10 +110,11 @@ You also need to copy the `.env` file with your token to the docker container
 docker cp <path_to/.env> <container name>:/bot
 ```
 
+Copy config file to container if you have it
 
-If you are going to run it locally on a Windows system, run the **start-bot.bat** file. If your PC has an **NVIDIA** gpu, you can run the bot using **CUDA**, which will increase performance. To do this, you must have <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit 11.8**</a> and <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN 8.9.5**</a> installed.
-
-> Tested on **Python 3.9**
+``` bash
+docker cp <path_to/config.json> <container name>:/bot
+```
 
 ## Supported commands
 The bot's settings are saved in `config.json`, which can be edited manually if needed (<a href="config_example.json" target="_blank">example</a>) - but the bot can be fully configured from discord using commands with the prefix `/`

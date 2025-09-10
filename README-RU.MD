@@ -64,7 +64,7 @@ git lfs pull
 
 4. Создайте виртуальное окружение
 
-> (для пользователей Windows) Просто запустите `start-bot.bat` и скрипт установит окружение, если оно ешё не установлено и запустит бота
+> (для пользователей Windows) Просто запустите `start-bot.bat` и скрипт установит окружение, если оно ешё не установлено и запустит бота. Должна быть установлена <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit**</a>, если хотите использовать свою nvidia видеокарту для ускорения работы бота. Протестировано на **Python 3.9**
 
 ``` bash
 python -m venv venv
@@ -76,17 +76,19 @@ pip install --upgrade pip
 Для использования без GPU (CPU):
 
 ``` bash
+pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cpu
 pip install -r requirements.txt
 ```
 
 Для использования с GPU (NVIDIA, CUDA):
 
 ``` bash
-pip install -r requirementsGPU.txt
+pip install torch==2.7.1 torchvision==0.22.1 --index-url https://download.pytorch.org/whl/cu128
+pip install -r requirements.txt
 ```
 
-Собрано под версию CUDA 11.8
-Если у вас стоит другая, то нужно менять torch в requirementsGPU.txt
+Собрано под версию CUDA 12.8
+Если у вас стоит другая, то вероятно потребуется изменить версию torch
 > ⚠️ для опытных пользователей
 
 5. Запуск
@@ -99,10 +101,8 @@ python main.py
 
 # Вариант использования Docker
 
-Если вы собираетесь хостить бота на сервере или вы просто не хотите устанавливать в систему всё необходимое окружение и у вас нет видеокарты с поддержкой CUDA, то самый простой способ это использование docker
-
 ``` bash
-docker pull psimera/apex-stat-detector-bot
+docker pull psimera/apex-stat-detector-bot-gpu
 ```
 
 В контейнер докера необходимо так же скопировать фаил `.env` с вашим токеном 
@@ -111,9 +111,11 @@ docker pull psimera/apex-stat-detector-bot
 docker cp <путь_к/.env> <имя контейнера>:/bot
 ```
 
-Если же вы собираетесь запустить его локально на системе windows, запустите фаил **start-bot.bat**. Если на машине присутствует видеокарта **NVIDIA**, то Вы можете запустить бота используя **CUDA**, что даст значительный прирост в скорости работы. Для этого должны быть установлены <a href="https://developer.nvidia.com/cuda-toolkit" target="_blank">**CUDA® Toolkit 11.8**</a> версии и <a href="https://developer.nvidia.com/cudnn" target="_blank">**cuDNN 8.9.5**</a>
+если у вас есть готовый фаил конфигурации, его тоже необходимо поместить в контейнер
 
-> Протестировано на **Python 3.9**
+``` bash
+docker cp <путь_к/config.json> <имя контейнера>:/bot
+```
 
 ## слэш команды
 Настройка хранятся в файле `config.json`, его если что можно отредактировать руками (<a href="config_example.json" target="_blank">пример</a>) , но все настройки производятся с помощью слэеш команд

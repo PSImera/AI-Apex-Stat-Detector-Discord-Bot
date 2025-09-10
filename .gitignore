@@ -3,3 +3,4 @@ venv/
 models/
 config.json
 .env
+docker_comands.txt
